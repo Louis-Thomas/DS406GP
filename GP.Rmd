@@ -201,9 +201,20 @@ Mod_gdp$countries <- tolower(Mod_gdp$Country) # We need to have it in lowercase
 
 airlinesafety_GDP <- merge(airlinesafety_GDP, Mod_gdp, by = 'countries') #merge with the lower case countries
 
-ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(GDP00_14 - GDP85_99))) + 
-  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) %>% ggplotly()
+#ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(GDP00_14 - GDP85_99))) + 
+#  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) %>% ggplotly()
 
+#ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(POP00_14 - POP85_99))) + 
+  # geom_point() %>% ggplotly()
+# GGPlotly not working so here:
+
+## With the difference in population
 ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(POP00_14 - POP85_99))) + 
-  geom_point() %>% ggplotly()
+  geom_point()
+
+# With the difference in GDP
+ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(GDP00_14 - GDP85_99))) + 
+  geom_point()
+
+ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(mean(POP00_14 - POP85_99)))) + geom_point()
 ```
