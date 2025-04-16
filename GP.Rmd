@@ -146,6 +146,8 @@ p <- ggplot(AirlineSafety, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, c
   facet_wrap(~continents) + geom_smooth(method = "lm", se = FALSE)
 
 ggplotly(p)
+
+p2
 ```
 
 
@@ -218,3 +220,13 @@ ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, co
 
 ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(mean(POP00_14 - POP85_99)))) + geom_point()
 ```
+
+```{r}
+model <- lm(fatalities_00_14 ~ *, data = airlinesafety_GDP)
+summary(model)
+
+library(GGally)
+
+GGally::ggpairs(airlinesafety_GDP%>%select(-countries, -Country, -continents, -airline, -POP85_99, -POP00_14))
+```
+

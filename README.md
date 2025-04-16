@@ -5,7 +5,7 @@ Group Project
 
 
 ## ERIN:
-- Difference in Fatalaties plot, *geom bar*
+- Difference in Fatalaties plot, in relation to the seat flight
 
 ## Louis:
 
@@ -16,9 +16,17 @@ Group Project
 
 ## Robert
 
+
 ## Aaron
+- Issue: Plot is too similar to Erin's
 
 ## Diaries:  
 From the April 
 - Discussed over that 
 
+### Conclusion: 
+- We can state waht we see from the plots and we need more data to come up before any conclusions,  
+
+### GGALLy GGPAIRS:
+
+- correlation between incidents from 1985-1999 and incidents 2000 - 2014
