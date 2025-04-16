@@ -15,6 +15,8 @@ Group Project
 - Conclusions
 
 ## Robert
+<img width="452" alt="image" src="https://github.com/user-attachments/assets/ae020033-8040-4301-b296-19c3ad882dd1" />
+
 - incidents vs fatal accidents for both 1985-1999, and 2000-2014.
 
 ## Aaron
