@@ -1,0 +1,209 @@
+---
+title: "On GP"
+author: "Louis Shibu Thomas 21315313"
+date: "`r format(Sys.time(), '%X %d %B, %Y')`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=4, fig.height=4)
+```
+
+Setting up csv and packages
+
+```{r, eval=T, echo=FALSE}
+suppressMessages(library(readr))
+suppressMessages(library(tidyverse))
+AirlineSafety <- read_csv("1AirlineSafety.csv")
+```
+
+```{r}
+suppressMessages(library(tidyverse))
+suppressMessages(library(plotly))
+
+glimpse(AirlineSafety)
+```
+
+```{r}
+companies <- tolower(AirlineSafety$airline)
+
+airlines <- tolower(c(
+  "Aer Lingus", "Aeroflot", "Aerolineas Argentinas", "Aeromexico",
+  "Air Canada", "Air France", "Air India", "Air New Zealand",
+  "Alaska Airlines", "Alitalia", "All Nippon Airways", "American",
+  "Austrian Airlines", "Avianca", "British Airways", "Cathay Pacific",
+  "China Airlines", "Condor", "Copa", "Delta / Northwest",
+  "Egyptair", "El Al", "Ethiopian Airlines", "Finnair",
+  "Garuda Indonesia", "Gulf Air", "Hawaiian Airlines", "Iberia",
+  "Japan Airlines", "Kenya Airways", "KLM", "Korean Air",
+  "LAN Airlines", "Lufthansa", "Malaysia Airlines", "Pakistan International",
+  "Philippine Airlines", "Qantas", "Royal Air Maroc", "SAS",
+  "Saudi Arabian", "Singapore Airlines", "South African", "Southwest Airlines",
+  "Sri Lankan / Airlanka", "Swiss", "TACA", "TAM",
+  "TAP - Air Portugal", "Thai Airways", "Turkish Airlines", "United / Continental",
+  "US Airways / America West", "Vietnam Airlines", "Virgin Atlantic", "Xiamen Airlines"
+))
+
+countries <- tolower(c(
+  "Ireland", "Russia", "Argentina", "Mexico",
+  "Canada", "France", "India", "New Zealand",
+  "United States", "Italy", "Japan", "United States",
+  "Austria", "Colombia", "United Kingdom", "Hong Kong (China)",
+  "Taiwan (China)", "Germany", "Panama", "United States",
+  "Egypt", "Israel", "Ethiopia", "Finland",
+  "Indonesia", "Bahrain", "United States", "Spain",
+  "Japan", "Kenya", "Netherlands", "South Korea",
+  "Chile", "Germany", "Malaysia", "Pakistan",
+  "Philippines", "Australia", "Morocco", "Scandinavia (Sweden, Denmark, Norway)",
+  "Saudi Arabia", "Singapore", "South Africa", "United States",
+  "Sri Lanka", "Switzerland", "El Salvador", "Brazil",
+  "Portugal", "Thailand", "Turkey", "United States",
+  "United States", "Vietnam", "United Kingdom", "China"
+))
+
+AirlineSafety$countries <- countries
+```
+
+
+List of continetns into relation to each country
+```{r}
+continents <- c(
+  "Europe",      # Ireland
+  "Europe",      # Russia (spans Europe and Asia, but the airline is European-coded)
+  "South America", # Argentina
+  "North America", # Mexico
+  "North America", # Canada
+  "Europe",      # France
+  "Asia",        # India
+  "Oceania",     # New Zealand
+  "North America", # United States
+  "Europe",      # Italy
+  "Asia",        # Japan
+  "North America", # United States
+  "Europe",      # Austria
+  "South America", # Colombia
+  "Europe",      # United Kingdom
+  "Asia",        # Hong Kong (China)
+  "Asia",        # Taiwan (China)
+  "Europe",      # Germany
+  "North America", # Panama
+  "North America", # United States
+  "Africa",      # Egypt
+  "Asia",        # Israel (geopolitically in Asia)
+  "Africa",      # Ethiopia
+  "Europe",      # Finland
+  "Asia",        # Indonesia
+  "Asia",        # Bahrain
+  "North America", # United States
+  "Europe",      # Spain
+  "Asia",        # Japan
+  "Africa",      # Kenya
+  "Europe",      # Netherlands
+  "Asia",        # South Korea
+  "South America", # Chile
+  "Europe",      # Germany
+  "Asia",        # Malaysia
+  "Asia",        # Pakistan
+  "Asia",        # Philippines
+  "Oceania",     # Australia
+  "Africa",      # Morocco
+  "Europe",      # Scandinavia (Sweden, Denmark, Norway)
+  "Asia",        # Saudi Arabia
+  "Asia",        # Singapore
+  "Africa",      # South Africa
+  "North America", # United States
+  "Asia",        # Sri Lanka
+  "Europe",      # Switzerland
+  "North America", # El Salvador
+  "South America", # Brazil
+  "Europe",      # Portugal
+  "Asia",        # Thailand
+  "Asia",        # Turkey (transcontinental, but airline is Asia-coded)
+  "North America", # United States
+  "North America", # United States
+  "Asia",        # Vietnam
+  "Europe",      # United Kingdom
+  "Asia"         # China
+)
+
+AirlineSafety$continents <- continents
+
+ggplot(AirlineSafety, aes(x = `incidents_85_99`, y = `incidents_00_14`, colour = continents)) + geom_point() + facet_wrap(~continents)
+
+ggplot(AirlineSafety, aes(x = `fatal_accidents_85_99`, y = `fatal_accidents_00_14`, colour = continents)) + geom_point() + facet_wrap(~continents)
+
+## Fatalaties
+ggplot(AirlineSafety, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = continents)) + geom_point() + facet_wrap(~continents)
+```
+
+### Getting interactive elements
+```{r}
+p <- ggplot(AirlineSafety, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(avail_seat_km_per_week))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) + 
+  facet_wrap(~continents) + geom_smooth(method = "lm", se = FALSE)
+
+ggplotly(p)
+```
+
+
+```{r}
+p <- ggplot(AirlineSafety, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(avail_seat_km_per_week))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents)))
+
+ggplotly(p)
+```
+
+### Trying to tie in GDP to see if there is anyhting:
+
+```{r}
+GDP_data <- tsibbledata::global_economy
+
+glimpse(GDP_data)
+
+unique(AirlineSafety$countries)[unique(AirlineSafety$countries) %in% tolower(unique(GDP_data$Country)) == FALSE]
+
+# Create a named vector for country name mappings
+country_mappings <- c(
+  "russian federation" = "russia",
+  "hong kong sar, china" = "hong kong (china)",
+  "egypt, arab rep." = "egypt",
+  "korea, rep." = "south korea"  # Add other mappings as needed
+)
+
+#Here we want to replace/delete airline countries that wont be in GDP data
+# Apply the mappings to airlinesafety
+airlinesafety_GDP <- AirlineSafety %>%
+  mutate(countries = case_when(
+    countries == "russian federation" ~ "russia",
+    countries == "hong kong sar, china" ~ "hong kong (china)",
+    countries == "egypt, arab rep." ~ "egypt",
+    countries == "korea, rep." ~ "south korea",
+    TRUE ~ countries  # Keep original if no mapping exists
+  ))
+airlinesafety_GDP <- airlinesafety_GDP %>%
+  filter(!countries %in% c("sweden", "denmark", "norway"))
+
+# Here we are filtering from 1985 to 1999 to get mean gdp's and mean pop's ...
+Mod_gdp_.85_99 <- GDP_data %>% as_tibble() %>% filter(Year >= 1985, Year < 2000) %>%
+  group_by(Country) %>% dplyr::summarise(GDP85_99 = mean(GDP, na.rm=TRUE),
+                               POP85_99 = mean(Population, na.rm=TRUE))
+  
+# Same thing as before
+Mod_gdp_.00_14 <- GDP_data %>% as_tibble() %>% filter(Year >= 2000, Year <= 2014) %>%
+  group_by(Country) %>% dplyr::summarise(GDP00_14 = mean(GDP, na.rm=TRUE),
+                               POP00_14 = mean(Population, na.rm=TRUE))
+
+Mod_gdp <- merge(Mod_gdp_.85_99, Mod_gdp_.00_14, by='Country')
+Mod_gdp$countries <- tolower(Mod_gdp$Country) # We need to have it in lowercase 
+
+airlinesafety_GDP <- merge(airlinesafety_GDP, Mod_gdp, by = 'countries') #merge with the lower case countries
+
+ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(GDP00_14 - GDP85_99))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) %>% ggplotly()
+
+ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(POP00_14 - POP85_99))) + 
+  geom_point() %>% ggplotly()
+```
