@@ -24,6 +24,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
+# Fix using regex: extract everything before the last two parts as 'metric' and the last two parts as period
 long_data <- data %>%
   pivot_longer(
     cols = c(incidents_85_99, fatal_accidents_85_99,
@@ -80,7 +81,6 @@ From the April
 
 
 # What's left:
-
 1. Change plots to match roberts type - created above
 2. Write Report
   - Erin: write the introduction
