@@ -78,3 +78,14 @@ From the April
 ### GGALLy GGPAIRS:
 
 - correlation between incidents from 1985-1999 and incidents 2000 - 2014
+
+
+# What's left:
+
+1. Change plots to match roberts type - created above
+2. Write Report
+  - Erin: write the introduction
+  - Aaron - do more the ggpars plot, and finish the Diary
+  - Louis: write th discussion and include ggp data. 
+  - Robert: Results section. 
+  
