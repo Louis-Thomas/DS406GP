@@ -44,12 +44,9 @@ airlines %>%
 - incidents vs fatal accidents for both 1985-1999, and 2000-2014.
 
 ```
-library(dplyr)
-library(tidyr)
-library(ggplot2)
+data <- read_csv("~/GroupProjectDS406/1AirlineSafety (2).csv")
 
-# Fix using regex: extract everything before the last two parts as 'metric' and the last two parts as period
-long_data <- data %>%
+Incidents_Accidents <- data %>%
   pivot_longer(
     cols = c(incidents_85_99, fatal_accidents_85_99,
              incidents_00_14, fatal_accidents_00_14),
@@ -65,24 +62,23 @@ long_data <- data %>%
                          "85_99" = "1985–1999",
                          "00_14" = "2000–2014"))
 
-ggplot(long_data, aes(x = incidents, y = fatal_accidents, color = period)) +
+ggplot(Incidents_Accidents, aes(x = incidents, y = fatal_accidents, color = period)) +
   geom_point(size = 3, alpha = 0.7) +
   scale_color_manual(values = c("1985–1999" = "blue", "2000–2014" = "red")) +
   labs(
-    title = "Incidents vs Fatal Accidents (Combined Periods)",
+    title = "Incidents vs Fatal Accidents for both 1985-1999 and 2000-2014",
     x = "Incidents",
     y = "Fatal Accidents",
     color = "Period"
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),
-    axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12),
-    legend.title = element_text(size = 14),
-    legend.text = element_text(size = 12)
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 16),
+    axis.text = element_text(size = 16),
+    legend.title = element_text(size = 16),
+    legend.text = element_text(size = 14)
   )
-
 ```
 
 
