@@ -107,6 +107,8 @@ From the April
   - Aaron - do more the ggpairs plot, and finish the Diary, Methods
   - Robert: Results section. Diary with Aaron.   
   - Louis: write the discussion and include gdp data. 
-  
+
+**For reports complete in the [reports sections](https://github.com/Louis-Thomas/DS406GP/tree/main/report)**  
+> There is a main.pdf there which would be a mock up of what the final product would look like. 
   
 # **FINISH THIS BY WEDNESDAY NIGHT** 👿👿👿

@@ -218,7 +218,7 @@ ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, co
 
 ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14, color = log(GDP00_14))) +
   geom_point(size = 3, alpha = 0.7) +
-  scale_color_manual(values = c("1985–1999" = "blue", "2000–2014" = "red")) +
+  scale_color_continuous(high = "red", low="blue") + 
   labs(
     title = "Old Fatalaties versus New Fatalaties",
     x = "Fatalaties from 1985 to 1999",
@@ -232,7 +232,7 @@ ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14, color 
     axis.text = element_text(size = 12),
     legend.title = element_text(size = 14),
     legend.text = element_text(size = 12)
-  )
+  ) + facet_wrap(~continents)
 
 
 #ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(`GDP85_99))) + 
@@ -249,6 +249,8 @@ summary(model)
 library(GGally)
 
 GGally::ggpairs(airlinesafety_GDP%>%select(-countries, -Country, -continents, -airline, -POP85_99, -POP00_14))
+
+GGally::ggpairs(AirlineSafety%>%select(-countries, -continents, -airline))
 ```
 
 From the GGALLY is there a correlation between incidents 1958-1999 and incidents 2000-2014:
