@@ -1,0 +1,15 @@
+---
+title: "methods"
+author: "Louis Thomas - 21315313"
+date: "2025-04-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+> Aaron please just fill out everything here so I can add it into the main.pd  
+> Finish this by wed
+
+## Methods
