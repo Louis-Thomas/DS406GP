@@ -81,10 +81,11 @@ From the April
 
 
 # What's left:
-1. Change plots to match roberts type - created above
-2. Write Report
+1. Change plots to match Robert's type - created above  
+2. Meeting during the break. Probably Online.
+3. Work on the presentation slides which is **due on the 25th Friday**
+4. Write Report - **Due 25th friday**
   - Erin: write the introduction
-  - Aaron - do more the ggpars plot, and finish the Diary
-  - Louis: write th discussion and include ggp data. 
-  - Robert: Results section. 
-  
+  - Aaron - do more the ggpairs plot, and finish the Diary, Methods
+  - Robert: Results section. Diary with Aaron.   
+  - Louis: write the discussion and include gdp data. 
