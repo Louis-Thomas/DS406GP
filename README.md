@@ -5,7 +5,31 @@ Group Project
 
 
 ## ERIN:
-- Difference in Fatalaties plot, in relation to the seat flight
+- Difference in Fatalities plot, in relation to the seat flight
+```
+airlines <- airline %>%
+  mutate(
+    incidents_85_99_rate = (incidents_85_99 / avail_seat_km_per_week) * 1e9,
+    fatal_accidents_85_99_rate = (fatal_accidents_85_99 / avail_seat_km_per_week) * 1e9,
+    fatalities_85_99_rate = (fatalities_85_99 / avail_seat_km_per_week) * 1e9,
+    
+    incidents_00_14_rate = (incidents_00_14 / avail_seat_km_per_week) * 1e9,
+    fatal_accidents_00_14_rate = (fatal_accidents_00_14 / avail_seat_km_per_week) * 1e9,
+    fatalities_00_14_rate = (fatalities_00_14 / avail_seat_km_per_week) * 1e9
+  )
+
+
+
+airlines %>%
+  filter(fatalities_85_99 > 50) %>%
+  mutate(change = fatalities_00_14_rate - fatalities_85_99_rate) %>%
+  ggplot(aes(x = reorder(airline, change), y = change)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Change in Fatalities per ASK",
+       y = "Change (00–14 vs. 85–99)", x = "Airline")
+
+```
 
 ## Louis:
 
