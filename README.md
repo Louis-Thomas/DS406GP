@@ -40,7 +40,7 @@ airlines %>%
 - Conclusions
 
 ## Robert
-<img width="452" alt="image" src="https://github.com/user-attachments/assets/ae020033-8040-4301-b296-19c3ad882dd1" />
+<img width="1435" alt="Screenshot 2025-04-17 at 12 04 33" src="https://github.com/user-attachments/assets/25a1a6d4-bd30-4ebc-bf32-81acde632c79" />
 
 - incidents vs fatal accidents for both 1985-1999, and 2000-2014.
 
