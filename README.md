@@ -21,6 +21,9 @@ Group Project
 
 ## Aaron
 - Issue: Plot is too similar to Erin's
+- Maybe make a nicer ggally like so:
+
+![Plotting fatalaties from 2000-2014 and 1985-199](./img/ggpairplot.png "Whatever")
 
 ## Diaries:  
 From the April 
