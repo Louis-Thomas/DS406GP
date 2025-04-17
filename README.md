@@ -98,7 +98,6 @@ From the April
 
 - correlation between incidents from 1985-1999 and incidents 2000 - 2014
 
-
 # What's left:
 1. Change plots to match Robert's type - created above  
 2. Meeting during the break. Probably Online.
@@ -108,3 +107,6 @@ From the April
   - Aaron - do more the ggpairs plot, and finish the Diary, Methods
   - Robert: Results section. Diary with Aaron.   
   - Louis: write the discussion and include gdp data. 
+  
+  
+# **FINISH THIS BY WEDNESDAY NIGHT** 👿👿👿
