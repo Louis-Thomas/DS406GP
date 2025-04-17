@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-> This would be added into the report pdf which you can find in this section
+> This would be added into the report pdf which you can find in this section  
+> If you want to see what the final product would look like, you can read main.pdf on the github.
+> try inlcude code so I can add it into the appendix.  
 
 ## Erin's Section
