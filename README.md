@@ -32,8 +32,6 @@ airlines %>%
 ```
 
 ## Louis:
-
-![Plotting fatalaties from 2000-2014 and 1985-199](./img/LouisGDPPlot.png "Testing")
 ![Plotting fatalaties from 2000-2014 and 1985-199](./img/LouisGDPPlot.png "Testing")
 
 - Including GDP and adding that as a reason.  
