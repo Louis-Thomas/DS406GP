@@ -19,6 +19,49 @@ Group Project
 
 - incidents vs fatal accidents for both 1985-1999, and 2000-2014.
 
+```
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Fix using regex: extract everything before the last two parts as 'metric' and the last two parts as period
+long_data <- data %>%
+  pivot_longer(
+    cols = c(incidents_85_99, fatal_accidents_85_99,
+             incidents_00_14, fatal_accidents_00_14),
+    names_to = c("metric", "period"),
+    names_pattern = "(.*)_(\\d{2}_\\d{2})",
+    values_to = "value"
+  ) %>%
+  pivot_wider(
+    names_from = metric,
+    values_from = value
+  ) %>%
+  mutate(period = recode(period,
+                         "85_99" = "1985–1999",
+                         "00_14" = "2000–2014"))
+
+ggplot(long_data, aes(x = incidents, y = fatal_accidents, color = period)) +
+  geom_point(size = 3, alpha = 0.7) +
+  scale_color_manual(values = c("1985–1999" = "blue", "2000–2014" = "red")) +
+  labs(
+    title = "Incidents vs Fatal Accidents (Combined Periods)",
+    x = "Incidents",
+    y = "Fatal Accidents",
+    color = "Period"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+
+```
+
+
 ## Aaron
 - Issue: Plot is too similar to Erin's
 - Maybe make a nicer ggally like so:
