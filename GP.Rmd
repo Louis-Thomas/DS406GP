@@ -146,8 +146,6 @@ p <- ggplot(AirlineSafety, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, c
   facet_wrap(~continents) + geom_smooth(method = "lm", se = FALSE)
 
 ggplotly(p)
-
-p2
 ```
 
 
@@ -228,5 +226,34 @@ summary(model)
 library(GGally)
 
 GGally::ggpairs(airlinesafety_GDP%>%select(-countries, -Country, -continents, -airline, -POP85_99, -POP00_14))
+```
+
+From the GGALLY is there a correlation between incidents 1958-1999 and incidents 2000-2014:
+
+```{r}
+ggplot(airlinesafety_GDP, aes(x = incidents_00_14, y=incidents_85_99, colour=log(fatalities_00_14))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) -> p_ggpairs
+ggplotly(p_ggpairs)
+
+ggplot(airlinesafety_GDP, aes(x = incidents_00_14, y=incidents_85_99, colour=log(fatalities_85_99))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) -> p_ggpairs
+ggplotly(p_ggpairs)
+
+ggplot(airlinesafety_GDP, aes(x = incidents_85_99, y=fatal_accidents_85_99, colour=scale(GDP85_99))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) -> p_ggpairs
+ggplotly(p_ggpairs)
+
+
+ggplot(airlinesafety_GDP, aes(x = incidents_00_14, y=fatal_accidents_00_14, colour=scale(GDP00_14))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) -> p_ggpairs
+ggplotly(p_ggpairs)
+
+ggplot(airlinesafety_GDP, aes(x = incidents_00_14, y=fatalities_00_14, colour=scale(GDP00_14))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) -> p_ggpairs
+ggplotly(p_ggpairs)
+
+ggplot(airlinesafety_GDP, aes(x = incidents_85_99, y=fatalities_00_14, colour=scale(GDP00_14 - GDP85_99))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) -> p_ggpairs
+ggplotly(p_ggpairs)
 ```
 
