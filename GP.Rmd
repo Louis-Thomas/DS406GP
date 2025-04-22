@@ -232,7 +232,7 @@ ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14, color 
     axis.text = element_text(size = 12),
     legend.title = element_text(size = 14),
     legend.text = element_text(size = 12)
-  ) + facet_wrap(~continents)
+  )
 
 
 #ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(`GDP85_99))) + 
@@ -280,5 +280,24 @@ ggplotly(p_ggpairs)
 ggplot(airlinesafety_GDP, aes(x = incidents_85_99, y=fatalities_00_14, colour=scale(GDP00_14 - GDP85_99))) + 
   geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) -> p_ggpairs
 ggplotly(p_ggpairs)
+```
+
+### Trying to right a simple model to see new fatalaties:
+
+```{r}
+library(splines)
+
+lm(data = airlinesafety_GDP, 
+   formula = fatalities_00_14 ~ ns(incidents_85_99, knots = 4)*ns(fatalities_85_99, knots=3)*GDP85_99 + 
+                                incidents_00_14*GDP00_14) -> modela
+
+summary(modela)
+
+airlinesafety_GDP$pred <- predict()
+
+library(leaps)
+allfits <- regsubsets(fatalities_00_14 ~ incidents_85_99*fatalities_85_99*GDP85_99 + 
+                                incidents_00_14*GDP00_14, data = airlinesafety_GDP, nvmax = 14)
+plot(allfits, scale="r2", main="best")
 ```
 

@@ -1,0 +1,352 @@
+---
+title: "Discussion"
+author: "Louis Thomas - 21315313"
+date: "2025-04-22"
+output: html_document
+---
+## Adding GDP:
+
+Looking at our correlation plot, we realised there wasn't much of a correlation between old and new incidents. And some data would have been impossible to find a meaningful relation between variables, for example - new fatal incidents. We decided we can summarise some information about the airlines by looking at their gdp and population.  
+
+```{r}
+library(patchwork)
+
+ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = log(avail_seat_km_per_week))) +
+  geom_point(size = 3, alpha = 0.7) +
+  labs(
+    title = "Old Fatalaties versus New Fatalaties",
+    x = "Fatalaties from 1985 to 1999",
+    y = "Fatalalties from 2000 to 2014",
+    color = "available seat km per week"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    legend.position = "none"
+  ) -> p1
+
+ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatalities_00_14,  colour = log(avail_seat_km_per_week))) +
+  geom_point(size = 3, alpha = 0.7) +
+  labs(
+    title = "Old Fatalaties versus New Fatalaties",
+    x = "Fatal Accidents from 1985 to 1999",
+    y = "Fatalalties from 2000 to 2014",
+    color = "available seat km per week"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    legend.position = "none"
+  ) -> p2
+
+ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatal_accidents_00_14,  colour = log(avail_seat_km_per_week))) +
+  geom_point(size = 3, alpha = 0.7) +
+  labs(
+    title = "Old Fatalaties versus New Fatalaties",
+    x = "Fatal Accidents from 1985 to 1999",
+    y = "Fatal Accidents from 2000 to 2014",
+    color = "available seat km per week"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    legend.position = "none"
+  ) -> p4
+
+ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatal_accidents_00_14, colour = log(avail_seat_km_per_week))) +
+  geom_point(size = 3, alpha = 0.7) +
+  labs(
+    title = "Old Fatalaties versus New Fatalaties",
+    x = "Fatalities from 1985 to 1999",
+    y = "Fatal Accidents from 2000 to 2014",
+    color = "available seat km per week"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    legend.position = "none"
+  ) -> p3
+
+
+(p1 + p2)/(p3 + p4)
+```
+
+Where the the lighter blue would be higher available seat km per week. Where there seems to be some interesting trends saying that bigger the seat per distance the larger the fatal-accidents. Two issues with this is that we don't know much available seat per km (ASK) this would definitely not be constant over the 30 years. Which can be seen in the plots, where near 0 old fatalities have high new fatalities and vica-versa.  
+**Results:** Not much of a correlation to work off of. Resulting in the interest in GDP and population data.  
+
+Firstly needed to get country gdp data and linking it to the associated country. So we started by looking at each airline and assigning a country to that. There were 56 countries, some would have the same associated country.   
+
+```{r}
+## cleaning
+sub("*", "", AirlineSafety$airline, fixed=TRUE) |> tolower() |> sort() -> companies
+
+airlines <- data.frame(companies) ## Made it into a dataframe to look at it easier
+
+## Made easier to categorize
+airlines$countries <- tolower(c(
+  "Ireland", 
+  "Russia", 
+  "Argentina", 
+  "Mexico",
+  "Canada", 
+  "France", 
+  "India", 
+  "New Zealand",
+  "United States", 
+  "Italy", 
+  "Japan", 
+  "United States",
+  "Austria", 
+  "Colombia", 
+  "United Kingdom", 
+  "Hong Kong (China)",
+  "Taiwan (China)", 
+  "Germany", 
+  "Panama", 
+  "United States",
+  "Egypt", 
+  "Israel", 
+  "Ethiopia", 
+  "Finland",
+  "Indonesia", 
+  "Bahrain", 
+  "United States", 
+  "Spain",
+  "Japan", 
+  "Kenya", 
+  "Netherlands", 
+  "South Korea",
+  "Chile", 
+  "Germany", 
+  "Malaysia", 
+  "Pakistan",
+  "Philippines", 
+  "Australia", 
+  "Morocco", 
+  "Scandinavia (Sweden, Denmark, Norway)",
+  "Saudi Arabia", 
+  "Singapore", 
+  "South Africa", 
+  "United States",
+  "Sri Lanka", 
+  "Switzerland", 
+  "El Salvador", 
+  "Brazil",
+  "Portugal", 
+  "Thailand", 
+  "Turkey", 
+  "United States",
+  "United States", 
+  "Vietnam", 
+  "United Kingdom", 
+  "China"
+))
+
+continents <- c(
+  "Europe",      # Ireland
+  "Europe",      # Russia (spans Europe and Asia, but the airline is European-coded)
+  "South America", # Argentina
+  "North America", # Mexico
+  "North America", # Canada
+  "Europe",      # France
+  "Asia",        # India
+  "Oceania",     # New Zealand
+  "North America", # United States
+  "Europe",      # Italy
+  "Asia",        # Japan
+  "North America", # United States
+  "Europe",      # Austria
+  "South America", # Colombia
+  "Europe",      # United Kingdom
+  "Asia",        # Hong Kong (China)
+  "Asia",        # Taiwan (China)
+  "Europe",      # Germany
+  "North America", # Panama
+  "North America", # United States
+  "Africa",      # Egypt
+  "Asia",        # Israel (geopolitically in Asia)
+  "Africa",      # Ethiopia
+  "Europe",      # Finland
+  "Asia",        # Indonesia
+  "Asia",        # Bahrain
+  "North America", # United States
+  "Europe",      # Spain
+  "Asia",        # Japan
+  "Africa",      # Kenya
+  "Europe",      # Netherlands
+  "Asia",        # South Korea
+  "South America", # Chile
+  "Europe",      # Germany
+  "Asia",        # Malaysia
+  "Asia",        # Pakistan
+  "Asia",        # Philippines
+  "Oceania",     # Australia
+  "Africa",      # Morocco
+  "Europe",      # Scandinavia (Sweden, Denmark, Norway)
+  "Asia",        # Saudi Arabia
+  "Asia",        # Singapore
+  "Africa",      # South Africa
+  "North America", # United States
+  "Asia",        # Sri Lanka
+  "Europe",      # Switzerland
+  "North America", # El Salvador
+  "South America", # Brazil
+  "Europe",      # Portugal
+  "Asia",        # Thailand
+  "Asia",        # Turkey (transcontinental, but airline is Asia-coded)
+  "North America", # United States
+  "North America", # United States
+  "Asia",        # Vietnam
+  "Europe",      # United Kingdom
+  "Asia"         # China
+)
+
+AirlineSafety$continents <- continents
+AirlineSafety$countries <- countries
+```
+
+Next was getting the gdp data and summarizing it for 1985-1999 and 2000-2014. You can find gdp data from the `tsibbledata::`. Matching them to the already defined continent and countries data will require some extra effort.   
+
+```{r}
+GDP_data <- tsibbledata::global_economy
+
+glimpse(GDP_data)
+
+unique(AirlineSafety$countries)[unique(AirlineSafety$countries) %in% tolower(unique(GDP_data$Country)) == FALSE]
+## Getting countries that doesn't match
+
+# Create a named vector for country name mappings
+country_mappings <- c(
+  "russian federation" = "russia",
+  "hong kong sar, china" = "hong kong (china)",
+  "egypt, arab rep." = "egypt",
+  "korea, rep." = "south korea"  # Add other mappings as needed
+)
+#Here we want to replace/delete airline countries that wont be in GDP data
+# Apply the mappings to airlinesafety
+airlinesafety_GDP <- AirlineSafety %>%
+  mutate(countries = case_when(
+    countries == "russian federation" ~ "russia",
+    countries == "hong kong sar, china" ~ "hong kong (china)",
+    countries == "egypt, arab rep." ~ "egypt",
+    countries == "korea, rep." ~ "south korea",
+    TRUE ~ countries  # Keep original if no mapping exists
+  ))
+airlinesafety_GDP <- airlinesafety_GDP %>%
+  filter(!countries %in% c("sweden", "denmark", "norway")) ## Getting rid of some of the mutlicountry airlines
+
+# Here we are filtering from 1985 to 1999 to get mean gdp's and mean pop's ...
+Mod_gdp_.85_99 <- GDP_data %>% as_tibble() %>% filter(Year >= 1985, Year < 2000) %>%
+  group_by(Country) %>% dplyr::summarise(GDP85_99 = mean(GDP, na.rm=TRUE),
+                               POP85_99 = mean(Population, na.rm=TRUE))
+  
+# Same thing as before
+Mod_gdp_.00_14 <- GDP_data %>% as_tibble() %>% filter(Year >= 2000, Year <= 2014) %>%
+  group_by(Country) %>% dplyr::summarise(GDP00_14 = mean(GDP, na.rm=TRUE),
+                               POP00_14 = mean(Population, na.rm=TRUE))
+
+Mod_gdp <- merge(Mod_gdp_.85_99, Mod_gdp_.00_14, by='Country')
+Mod_gdp$countries <- tolower(Mod_gdp$Country)
+airlinesafety_GDP <- merge(airlinesafety_GDP, Mod_gdp, by = 'countries') #merge with the lower case countries
+```
+
+Now that we have this data let's plot to see if there is any interesting trends from GDP and fatalities or incident data:
+For reasons presented above we will be dropping plots with new and old fatal accidents data. 
+```{r}
+ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = log(GDP85_99))) +
+  geom_point(size = 3, alpha = 0.7) +
+  scale_color_continuous(high = "red", low="blue", limits = c(20, 30)) + 
+  labs(
+    title = "Old Fatalaties versus New Fatalaties with old GDP",
+    x = "Fatalaties from 1985 to 1999",
+    y = "Fatalalties from 2000 to 2014",
+    color = "Average GDP logged"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+  ) -> p1
+
+ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = log(GDP00_14))) +
+  geom_point(size = 3, alpha = 0.7) +
+  scale_color_continuous(high = "red", low="blue", limits = c(20, 30)) + 
+  labs(
+    title = "Old Fatalaties versus New Fatalaties with GDP data",
+    x = "Fatalaties from 1985 to 1999",
+    y = "Fatalalties from 2000 to 2014",
+    color = "Average GDP logged"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  ) -> p2
+
+p1 + p2 + plot_layout(nrow = 2, guides = "collect") & theme(legend.position ="bottom") -> plot1
+plot1
+
+ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = log(POP85_99))) +
+  geom_point(size = 3, alpha = 0.7) +
+  scale_color_continuous(high = "red", low="blue", limits = c(14, 24)) + 
+  labs(
+    title = "Old Fatalaties versus New Fatalaties with old pop",
+    x = "Fatalaties from 1985 to 1999",
+    y = "Fatalalties from 2000 to 2014",
+    color = "Average Population logged"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  ) -> p3
+
+ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = log(POP00_14))) +
+  geom_point(size = 3, alpha = 0.7) +
+  scale_color_continuous(high = "red", low="blue", limits = c(14, 24)) + 
+  labs(
+    title = "Old Fatalaties versus New Fatalaties with new pop",
+    x = "Fatalaties from 1985 to 1999",
+    y = "Fatalalties from 2000 to 2014",
+    color = "Average Population logged"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  ) -> p4
+
+p3 + p4 + plot_layout(nrow = 2, guides = "collect") & theme(legend.position ="bottom") -> plot2
+
+plot2
+```
+
+Where less population and less gdp and less population tend to have less accidents. Probably due to them flying less.  
