@@ -104,9 +104,9 @@ From the April
 3. Work on the presentation slides which is **due on the 25th Friday**
 4. Write Report - **Due 25th friday**
   - Erin: write the introduction
-  - Aaron - do more the ggpairs plot, and finish the Diary, Methods
+  - Aaron - do more the ggpairs plot ✅, and finish the Diary, Methods
   - Robert: Results section. Diary with Aaron.   
-  - Louis: write the discussion and include gdp data. 
+  - Louis: Make mock-up of document ✅.Write the discussion and include gdp data. 
 
 **For reports complete in the [reports sections](https://github.com/Louis-Thomas/DS406GP/tree/main/report)**  
 > There is a main.pdf there which would be a mock up of what the final product would look like. 
