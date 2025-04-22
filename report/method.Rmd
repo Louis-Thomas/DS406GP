@@ -9,7 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-> Aaron please just fill out everything here so I can add it into the main.pd  
-> Finish this by wed
-
 ## Methods
+
+Methods:
+We used the Airline Safety dataset provided for the project, which is also available on GitHub. The dataset contains safety records for a range of airlines across two time periods: 1985–1999 and 2000–2014. Each observation includes variables such as the number of incidents, fatal accidents, fatalities, and available seat kilometers per week (ASK for short), a measure of airline capacity.
+  We started with some Data Preparation. To support further comparisons, we mapped each airline to its corresponding country and continent. Inconsistent country names (e.g., "russian federation" or "Scandinavia") were manually cleaned and standardized to lowercase for consistency.
+  To begin our analysis, we generated a pairwise correlation matrix using the ggpairs() function from the GGallypackage. Non-numeric columns (like: airline names, countries, and continents) were excluded from correlation analysis to focus on numeric relationships. To help visualize the relationships between key variables, names were manually renamed, and the plot was labelled. a background colour gradient was also added to highlight stronger correlations.
+  We found that correlations between incidents or fatalities across time periods were generally weak. To explore this further, we examined the relationship between fatality counts in the two timeframes using a scatter plot, with log-transformed ASK used as a colour gradient to show airline size. This allowed us to investigate whether larger airlines showed different patterns in safety outcomes.
+  We continued looking at another Rate-Based Comparison calculating safety incident rates per billion ASK For both periods. We computed the Incident rate, Fatal accident rate, and Fatality rate. Each was calculated by dividing the relevant count by ASK and multiplying by 10^9. These normalized rates allowed us to account for the different scale of each airline. We then focused on airlines that had more than 50 fatalities between 1985–1999 and computed the change in fatality rate from the earlier to the later period. These differences were visualized using a horizontal bar plot, with airlines ordered by the rate of change. This helped identify which higher risk airlines showed improvement or got worse in their safety performance over time.
+  Throughout the project, the ggplot2 and dplyr packages were invaluable for data screening and visualization. Additionally, tools such as GGally (for pairwise exploration), plotly (for interactive graphics used in some behind the scenes analysis), and tsibbledata (for GDP and population augmentation) played key roles in our analysis.
