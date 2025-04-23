@@ -12,3 +12,77 @@ knitr::opts_chunk$set(echo = TRUE)
 > section for you to write everything into
 
 ## Results
+
+Figure 1
+Need CODE to add this plot.
+This first graph shows a correlation matrix plot. This was made to check for any correlation between the airline data variables that were given between the periods 1985-1999 and 2000-2014. The variables included in the matrix were available seat kilometers flown every week, total number of incidents for 1985-1999 and 2000-2014, Total number of fatal accidents for 1985-1999 and 2000-2014, and total number of fatalities 1985-1999 and 2000-2014. 
+From observing the graph there is a clear strong positive relationship (Corr = 0.857) between incidents and fatal accidents in the period 1985-1999. This shows that airlines within this period that had a higher number of incidents were also more likely to have fatal accidents. In the period 2000-2014 there was also a similar correlation for these variables also (Corr = 0.598) just slightly weaker. This plot confirmed that there was a correlation between incidents and fatal accidents. 
+It can be seen also that there was a moderate correlation (Corr = 0.726) between the available seat kilometers flown every week and total number of incidents in the period 2000-2014 suggesting that airlines with greater flight volume are likely to have more incidents. This could be due to more use of the planes rather than poorer safety measures. 
+
+Figure 2
+```{r}
+Incidents_Accidents <- data %>%
+  pivot_longer(
+    cols = c(incidents_85_99, fatal_accidents_85_99,
+             incidents_00_14, fatal_accidents_00_14),
+    names_to = c("metric", "period"),
+    names_pattern = "(.*)_(\\d{2}_\\d{2})",
+    values_to = "value"
+  ) %>%
+  pivot_wider(
+    names_from = metric,
+    values_from = value
+  ) %>%
+  mutate(period = recode(period,
+                         "85_99" = "1985–1999",
+                         "00_14" = "2000–2014"))
+
+ggplot(Incidents_Accidents, aes(x = incidents, y = fatal_accidents, color = period)) +
+  geom_point(size = 3, alpha = 0.7) +
+  scale_color_manual(values = c("1985–1999" = "blue", "2000–2014" = "red")) +
+  labs(
+    title = "Incidents vs Fatal Accidents for both 1985-1999 and 2000-2014",
+    x = "Incidents",
+    y = "Fatal Accidents",
+    color = "Period"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 16),
+    axis.text = element_text(size = 16),
+    legend.title = element_text(size = 16),
+    legend.text = element_text(size = 14)
+  )
+```
+
+In figure 1 we found that there was a strong correlation between incidents and fatal accidents. This plot shows that but for both periods 1985-1999 (blue) and 2000-2014 (red). Each data point represents a single airline or multiple as some have the same total number of incidents and fatal accidents. For 1985-1999 we can see that the data points are more widely distributed with multiple airlines showing high incident and fatal accident counts. An airline Aeroflot at (76 incidents and 14 fatal accidents) shown within this period that it was a significant safety risk. 
+For the 2000-2014 period the data points all cluster at the bottom left of the graph shown by the red data points. This indicates that the majority of airlines experienced less incidents and fatal accidents showing an overall improvement in the safety of the airlines. These improvements may be due to the advancements in technology, and more safety measures. It was seen that Aeroflot that was the highest in the first period was no longer the highest in this period. It is also important to note that in both periods all american airlines (Delta/Northwest, United/Continental, US Airways/ American west, American) scored very high suggesting possibly american airlines are the least safest.
+Overall there is evidence that there is a decrease in the total number of incidents and fatal accidents from the period 1985-1999 to 2000-2014 suggesting an improvement in airline safety. 
+
+
+Figure 3
+```{r}
+airlines <- data %>%
+  mutate(
+    incidents_85_99_rate = (incidents_85_99 / avail_seat_km_per_week) * 1e9,
+    fatal_accidents_85_99_rate = (fatal_accidents_85_99 / avail_seat_km_per_week) * 1e9,
+    fatalities_85_99_rate = (fatalities_85_99 / avail_seat_km_per_week) * 1e9,
+    
+    incidents_00_14_rate = (incidents_00_14 / avail_seat_km_per_week) * 1e9,
+    fatal_accidents_00_14_rate = (fatal_accidents_00_14 / avail_seat_km_per_week) * 1e9,
+    fatalities_00_14_rate = (fatalities_00_14 / avail_seat_km_per_week) * 1e9
+  )
+
+airlines %>%
+  filter(fatalities_85_99 > 50) %>%
+  mutate(change = fatalities_00_14_rate - fatalities_85_99_rate) %>%
+  ggplot(aes(x = reorder(airline, change), y = change)) +
+  geom_col(fill = "blue") +
+  coord_flip() +
+  labs(title = "Change in Fatalities per ASK",
+       y = "Change (00–14 vs. 85–99)", x = "Airline") +
+  theme_minimal()
+```
+
+This bar chart represents the fatalities per ASK (Available Seat Kilometer) change from 1985-1999 to 2000-2014 across the airlines. From looking at the graph it is evident that the majority of airlines showed a decrease in fatalities per ASK. This indicates improved safety performance correlative to the volume of operations and suggests that even though fatalities still may occur for some airlines they are less frequent. Avianca and Pakistan international airlines both showed the largest decrease in fatalities per ASK. Airlines such as Air France and American did show an increase in fatalities per ASK which is alarming since the rest of the airlines showed a decreased. Overall this graph shows which airline safety outcomes have improved and which hadn't. It is also interesting to note that For all the american airlines as mentioned above in figure 2 there hasn't been much improvement. 
