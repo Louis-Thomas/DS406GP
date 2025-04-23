@@ -18,3 +18,69 @@ We used the Airline Safety dataset provided for the project, which is also avail
   We found that correlations between incidents or fatalities across time periods were generally weak. To explore this further, we examined the relationship between fatality counts in the two timeframes using a scatter plot, with log-transformed ASK used as a colour gradient to show airline size. This allowed us to investigate whether larger airlines showed different patterns in safety outcomes.
   We continued looking at another Rate-Based Comparison calculating safety incident rates per billion ASK For both periods. We computed the Incident rate, Fatal accident rate, and Fatality rate. Each was calculated by dividing the relevant count by ASK and multiplying by 10^9. These normalized rates allowed us to account for the different scale of each airline. We then focused on airlines that had more than 50 fatalities between 1985–1999 and computed the change in fatality rate from the earlier to the later period. These differences were visualized using a horizontal bar plot, with airlines ordered by the rate of change. This helped identify which higher risk airlines showed improvement or got worse in their safety performance over time.
   Throughout the project, the ggplot2 and dplyr packages were invaluable for data screening and visualization. Additionally, tools such as GGally (for pairwise exploration), plotly (for interactive graphics used in some behind the scenes analysis), and tsibbledata (for GDP and population augmentation) played key roles in our analysis.
+
+
+
+
+## Code for ggpairs plot:
+
+library(GGally)
+library(dplyr)
+library(ggplot2)
+
+# Rename and exclude non numeric columns
+AirlineSafety_labeled <- AirlineSafety %>%
+  select(-countries, -continents, -airline) %>%
+  rename(
+    `Seat KM / Week` = avail_seat_km_per_week,
+    `Incidents 1985–99` = incidents_85_99,
+    `Fatal Accidents 1985–99` = fatal_accidents_85_99,
+    `Fatalities 1985–99` = fatalities_85_99,
+    `Incidents 2000–14` = incidents_00_14,
+    `Fatal Accidents 2000–14` = fatal_accidents_00_14,
+    `Fatalities 2000–14` = fatalities_00_14
+  )
+
+#visually tweaking upper half
+custom_upper <- function(data, mapping, ...) 
+  {
+    x <- GGally::eval_data_col(data, mapping$x)
+    y <- GGally::eval_data_col(data, mapping$y)
+  
+    #highlighting high correlations
+    #bright green for very high correlation, dull green for moderately high corr, white      otherwise
+    corr <- cor(x, y, use = "complete.obs")
+    colours <-  if (corr >= 0.8) "#c3ffb3" else if (corr >= 0.7) "#d9ead3" else "white"
+
+    #label cells
+    GGally::ggally_cor(data, mapping, size = 4) +
+    annotate("text", x = -Inf, y = Inf,
+             label = paste(as_label(mapping$y), "\ VS\n",as_label(mapping$x)),
+             hjust = -0.05, vjust = 1.2, size = 3.5) +
+             theme(panel.background = element_rect(fill = colours, colour = NA))
+}
+
+
+#visually tweaking lower half
+custom_lower <- function(data, mapping, ...) 
+  {
+    x <- GGally::eval_data_col(data, mapping$x)
+    y <- GGally::eval_data_col(data, mapping$y)
+
+    # again, bright green for very high correlation, dull green for moderately high corr
+    corr <- cor(x, y, use = "complete.obs")
+    colours <-  if (corr >= 0.8) "#c3ffb3" else if (corr >= 0.7) "#d9ead3" 
+    ggplot(data, mapping) +
+    geom_point(alpha = 0.5) +
+    theme(panel.background = element_rect(fill = colours, colour = NA))
+  
+    #not including labels in bottom half as they obscure the plots 
+  }
+
+# Final plot
+plot <- ggpairs(AirlineSafety_labeled,
+  upper = list(continuous = custom_upper),
+  lower = list(continuous = custom_lower),
+  title = "Pairwise Relationships for Airline Safety Variables")
+
+print(plot)
