@@ -22,7 +22,7 @@ library(patchwork)
 ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = log(avail_seat_km_per_week))) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
-    title = "Old Fatalaties versus New Fatalaties",
+    title = "Old Fatalaties vs New Fatalaties",
     x = "Fatalaties from 1985 to 1999",
     y = "Fatalalties from 2000 to 2014",
     color = "available seat km per week"
@@ -39,7 +39,7 @@ ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = 
 ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatalities_00_14,  colour = log(avail_seat_km_per_week))) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
-    title = "Old Fatal Accidents versus New Fatalaties",
+    title = "Old Fatal Accidents vs New Fatalaties",
     x = "Fatal Accidents from 1985 to 1999",
     y = "Fatalalties from 2000 to 2014",
     color = "available seat km per week"
@@ -56,7 +56,7 @@ ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatalities_00_14,  colo
 ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatal_accidents_00_14,  colour = log(avail_seat_km_per_week))) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
-    title = "Old Fatal Accidents versus New Fatal Accidents",
+    title = "Old Fatal Accidents vs New Fatal Accidents",
     x = "Fatal Accidents from 1985 to 1999",
     y = "Fatal Accidents from 2000 to 2014",
     color = "available seat km per week"
@@ -73,7 +73,7 @@ ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatal_accidents_00_14, 
 ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatal_accidents_00_14, colour = log(avail_seat_km_per_week))) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
-    title = "Old Fatalaties versus New Fatal Accidents",
+    title = "Old Fatalaties vs New Fatal Accidents",
     x = "Fatalities from 1985 to 1999",
     y = "Fatal Accidents from 2000 to 2014",
     color = "available seat km per week"
@@ -88,7 +88,10 @@ ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatal_accidents_00_14, colou
   ) -> p3
 
 
-(p1 + p2)/(p3 + p4) + plot_layout(nrow = 2, guides = "collect") & theme(legend.position ="bottom") -> plot1
+(p1 + p2)/(p3 + p4) + plot_layout(nrow = 2, guides = "collect") & theme(legend.position ="bottom", 
+                                                                        plot.title = element_text(size=12),
+                                                                        axis.title = element_text(size=8),) -> plot1
+plot1
 ```
 
 Saved in the this [location](https://github.com/Louis-Thomas/DS406GP/blob/main/img/FatalandAccident.png)
