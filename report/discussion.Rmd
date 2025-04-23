@@ -34,13 +34,12 @@ ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = 
     axis.text = element_text(size = 12),
     legend.title = element_text(size = 14),
     legend.text = element_text(size = 12),
-    legend.position = "none"
   ) -> p1
 
 ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatalities_00_14,  colour = log(avail_seat_km_per_week))) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
-    title = "Old Fatalaties versus New Fatalaties",
+    title = "Old Fatal Accidents versus New Fatalaties",
     x = "Fatal Accidents from 1985 to 1999",
     y = "Fatalalties from 2000 to 2014",
     color = "available seat km per week"
@@ -52,13 +51,12 @@ ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatalities_00_14,  colo
     axis.text = element_text(size = 12),
     legend.title = element_text(size = 14),
     legend.text = element_text(size = 12),
-    legend.position = "none"
   ) -> p2
 
 ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatal_accidents_00_14,  colour = log(avail_seat_km_per_week))) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
-    title = "Old Fatalaties versus New Fatalaties",
+    title = "Old Fatal Accidents versus New Fatal Accidents",
     x = "Fatal Accidents from 1985 to 1999",
     y = "Fatal Accidents from 2000 to 2014",
     color = "available seat km per week"
@@ -70,13 +68,12 @@ ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = fatal_accidents_00_14, 
     axis.text = element_text(size = 12),
     legend.title = element_text(size = 14),
     legend.text = element_text(size = 12),
-    legend.position = "none"
   ) -> p4
 
 ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatal_accidents_00_14, colour = log(avail_seat_km_per_week))) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
-    title = "Old Fatalaties versus New Fatalaties",
+    title = "Old Fatalaties versus New Fatal Accidents",
     x = "Fatalities from 1985 to 1999",
     y = "Fatal Accidents from 2000 to 2014",
     color = "available seat km per week"
@@ -88,12 +85,13 @@ ggplot(AirlineSafety, aes(x = fatalities_85_99, y = fatal_accidents_00_14, colou
     axis.text = element_text(size = 12),
     legend.title = element_text(size = 14),
     legend.text = element_text(size = 12),
-    legend.position = "none"
   ) -> p3
 
 
-(p1 + p2)/(p3 + p4)
+(p1 + p2)/(p3 + p4) + plot_layout(nrow = 2, guides = "collect") & theme(legend.position ="bottom") -> plot1
 ```
+
+Saved in the this [location](https://github.com/Louis-Thomas/DS406GP/blob/main/img/FatalandAccident.png)
 
 Where the the lighter blue would be higher available seat km per week. Where there seems to be some interesting trends saying that bigger the seat per distance the larger the fatal-accidents. Two issues with this is that we don't know much available seat per km (ASK) this would definitely not be constant over the 30 years. Which can be seen in the plots, where near 0 old fatalities have high new fatalities and vica-versa.  
 **Results:** Not much of a correlation to work off of. Resulting in the interest in GDP and population data.  
