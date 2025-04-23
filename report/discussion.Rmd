@@ -6,6 +6,14 @@ output: html_document
 ---
 ## Adding GDP:
 
+Setup:
+```{r}
+suppressMessages(library(readr))
+suppressMessages(library(tidyverse))
+AirlineSafety <- read_csv("../1AirlineSafety.csv")
+```
+
+
 Looking at our correlation plot, we realised there wasn't much of a correlation between old and new incidents. And some data would have been impossible to find a meaningful relation between variables, for example - new fatal incidents. We decided we can summarise some information about the airlines by looking at their gdp and population.  
 
 ```{r}
@@ -218,7 +226,7 @@ continents <- c(
 )
 
 AirlineSafety$continents <- continents
-AirlineSafety$countries <- countries
+AirlineSafety$countries <- airlines$countries
 ```
 
 Next was getting the gdp data and summarizing it for 1985-1999 and 2000-2014. You can find gdp data from the `tsibbledata::`. Matching them to the already defined continent and countries data will require some extra effort.   
