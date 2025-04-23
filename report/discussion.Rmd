@@ -4,7 +4,19 @@ author: "Louis Thomas - 21315313"
 date: "2025-04-22"
 output: html_document
 ---
-## Adding GDP:
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About Roberts plots:
+The best message that we get from the results is the fact that fatalities are decreasing. This is a really good trend to see, as it shows us that airlines are getting safer, made clear from **robert's** and **erin's** plots. The variability of fatalities between airlines have gotten better.  
+These results are similar to the results the article came to, where there isn't much of a sign of past fatalities implying future fatalities, and how global fatal accident rate has decreased significantly over the few decades.   
+> https://fivethirtyeight.com/features/should-travelers-avoid-flying-airlines-that-have-had-crashes-in-the-past/  
+
+Where
+
+From the data set it would be interesting to discuss the trend between available seat km per week (ASK). **Seen below**
 
 Setup:
 ```{r}
@@ -13,8 +25,7 @@ suppressMessages(library(tidyverse))
 AirlineSafety <- read_csv("../1AirlineSafety.csv")
 ```
 
-
-Looking at our correlation plot, we realised there wasn't much of a correlation between old and new incidents. And some data would have been impossible to find a meaningful relation between variables, for example - new fatal incidents. We decided we can summarise some information about the airlines by looking at their gdp and population.  
+> Looking at our correlation plot, we realised there wasn't much of a correlation between old and new incidents. And some data would have been impossible to find a meaningful relation between variables, for example - new fatal incidents. We decided we can summarise some information about the airlines by looking at their gdp and population.  
 
 ```{r}
 library(patchwork)
@@ -100,6 +111,14 @@ Where the the lighter blue would be higher available seat km per week. Where the
 **Results:** Not much of a correlation to work off of. Resulting in the interest in GDP and population data.  
 
 Firstly needed to get country gdp data and linking it to the associated country. So we started by looking at each airline and assigning a country to that. There were 56 countries, some would have the same associated country.   
+
+### About Plot1:
+The main trends is that not much airlines are in the upper right quadrant. Where you would high old and new fatalities or high new and old fatal accidents. These can be seen in the first to plots in the **fig 1**.   
+What we are seeing in the top-left and bottom-right quadrants are more volatile airlines. Where they would have high and low fatalities from one period to the other. 
+Where the the lighter blue would be higher ASK variables. Where there seems to be some interesting trends saying that bigger the seat per distance the larger the fatal-accidents. We found that there might be issues with the ASK variable, mainly being the fact that it would not be constant over the 30 year period. Which is further supported with data points on top-left and bottom-right quadrants. Furthermore, saying that more seats on means more fatalities is a little redundant.    
+Causing us to explore alternatives to ASK. Variables, that could reflect the safety of an airline, would be the amount of money spent on safety. Here due to constraints we couldn't get this value, instead we opted for GDP and Population. Where GDP would capture disposable income of a country, as well as the limit of how much an airline can spend.   
+
+Exploring ASK further
 
 ```{r}
 ## cleaning
@@ -280,7 +299,7 @@ For reasons presented above we will be dropping plots with new and old fatal acc
 ```{r}
 ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = log(GDP85_99))) +
   geom_point(size = 3, alpha = 0.7) +
-  scale_color_continuous(high = "red", low="blue", limits = c(20, 30)) + 
+  scale_color_continuous(high = "red", low="blue", limits = c(23, 30)) + 
   labs(
     title = "Old Fatalaties versus New Fatalaties with old GDP",
     x = "Fatalaties from 1985 to 1999",
@@ -298,7 +317,7 @@ ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14,  colou
 
 ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14,  colour = log(GDP00_14))) +
   geom_point(size = 3, alpha = 0.7) +
-  scale_color_continuous(high = "red", low="blue", limits = c(20, 30)) + 
+  scale_color_continuous(high = "red", low="blue", limits = c(23, 30)) + 
   labs(
     title = "Old Fatalaties versus New Fatalaties with GDP data",
     x = "Fatalaties from 1985 to 1999",
@@ -359,3 +378,23 @@ plot2
 ```
 
 Where less population and less gdp and less population tend to have less accidents. Probably due to them flying less.  
+
+### GDP plot:
+There are some interesting trends. Where higher old fatalities and low new fatalities would have higher old GDP means. There seemingly is less of a trend for the new GDP plot.  
+But what seems to be clear is that we have a similar trend to the ASK plots. Where lower GDP would be around the low-left quadrant, i.e. low new and old fatalities.  
+Probably showing us the same information, that less possible flying resulted in fewer deaths.  
+
+```{r}
+p <- ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = log(GDP00_14))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) + 
+  facet_wrap(~continents) + geom_smooth(method = "lm", se = FALSE)
+
+ggplotly(p)
+
+p <- ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = log(GDP85_99))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) + 
+  facet_wrap(~continents) + geom_smooth(method = "lm", se = FALSE)
+
+ggplotly(p)
+```
+
