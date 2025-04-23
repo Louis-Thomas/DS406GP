@@ -11,6 +11,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 > section for you to write everything into
 
+```{r}
+suppressMessages(library(readr))
+suppressMessages(library(tidyverse))
+data <- read_csv("../1AirlineSafety.csv")
+```
+
+
 ## Results
 
 Figure 1
@@ -48,12 +55,13 @@ ggplot(Incidents_Accidents, aes(x = incidents, y = fatal_accidents, color = peri
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 20, face = "bold"),
+    plot.title = element_text(size = 18, face = "bold"),
     axis.title = element_text(size = 16),
     axis.text = element_text(size = 16),
     legend.title = element_text(size = 16),
     legend.text = element_text(size = 14)
-  )
+  ) -> plot1
+plot1
 ```
 
 In figure 1 we found that there was a strong correlation between incidents and fatal accidents. This plot shows that but for both periods 1985-1999 (blue) and 2000-2014 (red). Each data point represents a single airline or multiple as some have the same total number of incidents and fatal accidents. For 1985-1999 we can see that the data points are more widely distributed with multiple airlines showing high incident and fatal accident counts. An airline Aeroflot at (76 incidents and 14 fatal accidents) shown within this period that it was a significant safety risk. 
