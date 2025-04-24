@@ -79,6 +79,7 @@ ggplot(Incidents_Accidents, aes(x = incidents, y = fatal_accidents, color = peri
     legend.text = element_text(size = 14)
   )
 ```
+Our answer for "should travellers avoid airlines who had crashed in the past" is that checking an airlines track record can help predict the probaility of future crashes. From looking at our plots above we can see that there is a relationship between incidents and fatal accidents suggesting that airlines with a large number of incidents are typically more dangerous to fly with. Among these airlines Aeroflot which was a major outlier in Figure 1 which had 76 incidents between 1985-1999 which was due to many attempted hijackings at the time of the split of the Soviet Union (reference the paper he gave us). But in the following period (2000-2014) the incidents for Aeroflot had significantly decreased therefore for some airlines there are known reasons for incidents that have occured. In Figure 2 we did see a decrease overall for fatailties per ASK suggesting there is an improvement in safety measurements for the airlines. Overall we would suggest that travellers shouldn't avoid airlines who had crashed in the past as it evident that overall safety has improved significantly for the airlines from one period to another as the varibility for both incidents and fatal accidents has decreased majorly. 
 
 
 ## Aaron
