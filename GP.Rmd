@@ -146,11 +146,18 @@ p <- ggplot(AirlineSafety, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, c
   facet_wrap(~continents) + geom_smooth(method = "lm", se = FALSE)
 
 ggplotly(p)
+
+
 ```
 
 
 ```{r}
 p <- ggplot(AirlineSafety, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(avail_seat_km_per_week))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents)))
+
+ggplotly(p)
+
+p <- ggplot(AirlineSafety, aes(x = fatal_accidents_85_99, y = `fatalities_00_14`, colour = scale(avail_seat_km_per_week))) + 
   geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents)))
 
 ggplotly(p)
@@ -234,6 +241,11 @@ ggplot(airlinesafety_GDP, aes(x = fatalities_85_99, y = fatalities_00_14, color 
     legend.text = element_text(size = 12)
   )
 
+p <- ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = log(GDP00_14))) + 
+  geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) + 
+  facet_wrap(~continents) + geom_smooth(method = "lm", se = FALSE)
+
+ggplotly(p)
 
 #ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = scale(`GDP85_99))) + 
 #  geom_point()
