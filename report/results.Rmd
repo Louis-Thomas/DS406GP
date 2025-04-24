@@ -97,7 +97,8 @@ airlines %>%
     axis.text = element_text(size = 16),
     legend.title = element_text(size = 16),
     legend.text = element_text(size = 14)
-  )
+  ) -> plot2
+plot2
 ```
 
 This bar chart represents the fatalities per ASK (Available Seat Kilometer) change from 1985-1999 to 2000-2014 across the airlines. From looking at the graph it is evident that the majority of airlines showed a decrease in fatalities per ASK. This indicates improved safety performance correlative to the volume of operations and suggests that even though fatalities still may occur for some airlines they are less frequent. Avianca and Pakistan international airlines both showed the largest decrease in fatalities per ASK. Airlines such as Air France and American did show an increase in fatalities per ASK which is alarming since the rest of the airlines showed a decreased. Overall this graph shows which airline safety outcomes have improved and which hadn't. It is also interesting to note that For all the american airlines as mentioned above in figure 2 there hasn't been much improvement. 
