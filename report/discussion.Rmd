@@ -385,7 +385,9 @@ But what seems to be clear is that we have a similar trend to the ASK plots. Whe
 Probably showing us the same information, that less possible flying resulted in fewer deaths.  
 
 ```{r}
-p <- ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14`, colour = log(GDP00_14))) + 
+library(plotly)
+
+p <- ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`/avail_seat_km_per_week, y = `fatalities_00_14`/avail_seat_km_per_week, colour = log(GDP00_14))) + 
   geom_point(aes(text = paste("Airline: ", airline, "\n", "Continents: ", continents))) + 
   facet_wrap(~continents) + geom_smooth(method = "lm", se = FALSE)
 
@@ -397,4 +399,3 @@ p <- ggplot(airlinesafety_GDP, aes(x = `fatalities_85_99`, y = `fatalities_00_14
 
 ggplotly(p)
 ```
-
